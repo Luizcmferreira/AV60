@@ -2,16 +2,16 @@ import React, { createContext,useState} from 'react';
 
 export const UsuariosContext = createContext();
 
-export const ProdutosProvider= ({children}) => {
-    const [listaUsuarios, setListaDeUsuarios]= useState([]);
+export const UsuariosProvider= ({children}) => {
+    const [listaDeUsuarios, setListaDeUsuarios]= useState([]);
 
-    const adicionarUsuario =(usuario) =>{
-        setListaDeUsuarios((prev) => [...prev, usuario]);
+    const adicionarUsuarios =(usuarios) =>{
+        setListaDeUsuarios((prev) => [...prev, usuarios]);
     };
 
     return (
-        <ProdutosContext.Provider value={{listaDeUsuarios, adicionarUsuario}}>
+        <UsuariosContext.Provider value={{listaDeUsuarios, adicionarUsuarios}}>
             {children}
-        </ProdutosContext.Provider>
+        </UsuariosContext.Provider>
     );
 };

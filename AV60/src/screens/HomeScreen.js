@@ -1,22 +1,63 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, {useEffect, useState} from "react";
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
+import { subscribeUsuarios } from "../service/UsuariosService";
 
 export default function HomeScreen({navigation}) {
+   const [usuarios, setUsuarios] = useState([]);
+   const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+    const unsubscribe = subscribeUsuarios((dados) => {
+      setUsuarios(dados);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007BFF" />
+        <Text>Carregando usuários...</Text>
+      </View>
+    );
+  }
+
+     const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.usuarioItem}
+      onPress={() => navigation.navigate("Detalhes", { idusuario: item.id })}
+    >
+      <Text style={styles.usuarioNome}>{item.usuario}</Text>
+      <Text>{item.email}</Text>
+    </TouchableOpacity>
+  );
+
+     return (
+
+    <View style={styles.container}>
         <Text style={styles.title}>Aplicativo de controle de usuário para melhorar o acompanhamento.</Text>
 
         <TouchableOpacity
           style={styles.styleButtom}
           onPress={()=> navigation.navigate("Cadastro")}  
         >
-        <Text  style={styles.buttomText}>Cadastrar Produtos</Text>
+        <Text  style={styles.buttomText}>Cadastrar Usuário</Text>
         </TouchableOpacity>
+        
+        <FlatList
+        data={usuarios}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 10 }}
+      />
 
         <TouchableOpacity
           style={styles.styleButtom}
           onPress={()=> navigation.navigate("Detalhes")}  
         >
-        <Text style={styles.buttomText}>Detalhes do usuário</Text>
+        <Text style={styles.buttomText}>Detalhes do Usuário</Text>
         </TouchableOpacity>
     
       </View>
@@ -34,7 +75,7 @@ export default function HomeScreen({navigation}) {
     title:{
       fontSize: 18,
       fontWeight:'bold',
-      marginTop:40,
+      textAlign: "center",
       marginBottom: 20
     },
 
