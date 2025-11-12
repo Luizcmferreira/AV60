@@ -53,12 +53,7 @@ export default function HomeScreen({navigation}) {
         contentContainerStyle={{ paddingBottom: 10 }}
       />
 
-        <TouchableOpacity
-          style={styles.styleButtom}
-          onPress={()=> navigation.navigate("Detalhes")}  
-        >
-        <Text style={styles.buttomText}>Detalhes do Usuário</Text>
-        </TouchableOpacity>
+        
     
       </View>
     );
